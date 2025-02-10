@@ -1,0 +1,23 @@
+# Fork the repository on GitHub
+
+# Clone the forked repository
+git clone https://github.com/your-username/forked-repo.git
+
+# Navigate to the repository directory
+cd forked-repo
+
+# Create a new branch
+git checkout -b my-feature-branch
+
+# Make changes to the files
+
+# Stage the changes
+git add .
+
+# Commit the changes
+git commit -m "Add new feature"
+
+# Push the changes to GitHub
+git push origin my-feature-branch
+
+# Create a pull request on GitHub
