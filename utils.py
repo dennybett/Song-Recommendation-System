@@ -14,6 +14,7 @@ from sklearn.mixture import GaussianMixture
 from sklearn.cluster import AgglomerativeClustering
 from sklearn.cluster import DBSCAN
 
+
 # Models to use in supervised learning pipeline
 from sklearn.linear_model import LinearRegression 
 from sklearn.linear_model import SGDRegressor
@@ -333,30 +334,6 @@ def train_gaussian_mixture_model(df, num_components):
 
     return df
 
-# Train KModes model 
-def train_kmodes_model(df, num_clusters):
-    """
-    Args:
-    DataFrame : A pandas dataframe object containing data of interest
-    num_clusters : The number of clusters to form
-    
-    Returns: A KModes model trained on the data.
-    """
-    
-    # Initialize a KModes model
-    km = KModes(n_clusters=num_clusters)
-    
-    # Fit the model to the data
-    km.fit(df)
-
-    # Make predictions on the data
-    clusters = km.predict(df)
-    
-    # Add the cluster labels to the original DataFrame
-    df['Cluster'] = clusters
-
-    return df  
-
 # Train DBSCAN model
 def train_dbscan_model(df, eps, min_samples):
     """
@@ -399,7 +376,7 @@ def plot_KMean_clusters(df, features):
     plt.show()
 
 # Function to encode the genre column
-def encodedMethod(genre)
+def encodedMethod(genre):
     """
     Args:
     genre : A list of column(s) of the dependent variable(label)
@@ -409,9 +386,9 @@ def encodedMethod(genre)
     
     if genre == 'Action':
         encoded_genre = 1
-    else if genre == 'Adventure':
+    elif genre == 'Adventure':
         encoded_genre = 2
-    else if genre == 'Animation':
+    elif genre == 'Animation':
          encoded_genre = 3
     
     return encoded_genre
