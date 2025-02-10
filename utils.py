@@ -6,14 +6,20 @@ import seaborn as sns
 from scipy import stats
 import warnings
 warnings.filterwarnings('ignore')
+import sklearn
 
-#Models to use in our pipeline 
+# Models to use in unsupervised learning pipeline
+from sklearn.cluster import KMeans
+from sklearn.mixture import GaussianMixture
+from sklearn.cluster import AgglomerativeClustering
+from sklearn.cluster import DBSCAN
+
+# Models to use in supervised learning pipeline
 from sklearn.linear_model import LinearRegression 
 from sklearn.linear_model import SGDRegressor
 from sklearn.linear_model import Lasso   
 from sklearn.linear_model import Ridge   
 from sklearn.svm import SVR
-
 
 #Preprocessing dependencies
 from sklearn.model_selection import train_test_split
@@ -250,4 +256,214 @@ def model_generator(df, features, target):
         results["Mean Squared error"] = mse
         print(f"{model}|| R squared: {r2_value:.3f} || Adjusted R squared:{r2_adj_value:.3f}")
         print("===================================================================")
+
+#
+# Clustering models to use in the unsupervised learning pipeline
+#
+
+# Train KMeans model 
+def train_kmeans_model(df, num_clusters):
+    """
+    Args:
+    DataFrame : A pandas dataframe object containing data of interest
+    num_clusters : The number of clusters to form
+    
+    Returns: DataFrame with A KMeans model trained on the data.
+    """
+    
+    # Initialize a KMeans model
+    kmeans = KMeans(n_clusters=num_clusters, n_init='auto', random_state=random_state)
+    
+    # Fit the model to the data
+    kmeans.fit(df)
+
+    # Make predictions on the data
+    clusters = kmeans.predict(df)
+    
+    # Add the cluster labels to the original DataFrame
+    df['Cluster'] = clusters
+
+    return df
+
+# Train Hierarchical Clustering model 
+def train_hierarchical_clustering_model(df, num_clusters):
+    """
+    Args:
+    DataFrame : A pandas dataframe object containing data of interest
+    num_clusters : The number of clusters to form
+    
+    Returns: A Hierarchical Clustering model trained on the data.
+    """
+    
+    # Initialize a Hierarchical Clustering model
+    hc = AgglomerativeClustering(n_clusters=num_clusters)
+    
+    # Fit the model to the data
+    hc.fit(df)
+
+    # Make predictions on the data
+    clusters = hc.fit_predict(df)
+    
+    # Add the cluster labels to the original DataFrame
+    df['Cluster'] = clusters
+
+    return df
+    
+# Train Gaussian Misture Model 
+def train_gaussian_mixture_model(df, num_components):
+    """
+    Args:
+    DataFrame : A pandas dataframe object containing data of interest
+    num_components : The number of components to use in the Gaussian Mixture Model
+    
+    Returns: A Gaussian Mixture Model trained on the data.
+    """
+    
+    # Initialize a Gaussian Mixture Model
+    gmm = GaussianMixture(n_components=num_components, random_state=random_state)
+    
+    # Fit the model to the data
+    gmm.fit(df)
+
+    # Make predictions on the data
+    clusters = gmm.predict(df)
+    
+    # Add the cluster labels to the original DataFrame
+    df['Cluster'] = clusters
+
+    return df
+
+# Train KModes model 
+def train_kmodes_model(df, num_clusters):
+    """
+    Args:
+    DataFrame : A pandas dataframe object containing data of interest
+    num_clusters : The number of clusters to form
+    
+    Returns: A KModes model trained on the data.
+    """
+    
+    # Initialize a KModes model
+    km = KModes(n_clusters=num_clusters)
+    
+    # Fit the model to the data
+    km.fit(df)
+
+    # Make predictions on the data
+    clusters = km.predict(df)
+    
+    # Add the cluster labels to the original DataFrame
+    df['Cluster'] = clusters
+
+    return df  
+
+# Train DBSCAN model
+def train_dbscan_model(df, eps, min_samples):
+    """
+    Args:
+    DataFrame : A pandas dataframe object containing data of interest
+    eps : The maximum distance between two samples for one to be considered as in the neighborhood of the other
+    min_samples : The number of samples in a neighborhood for a point to be considered as a core point
+    
+    Returns: A DBSCAN model trained on the data.
+    """
+    
+    # Initialize a DBSCAN model
+    dbscan = DBSCAN(eps=eps, min_samples=min_samples)
+    
+    # Fit the model to the data
+    dbscan.fit(df)
+
+    # Make predictions on the data
+    clusters = dbscan.fit_predict(df)
+    
+    # Add the cluster labels to the original DataFrame
+    df['Cluster'] = clusters
+
+    return df 
+
+# Function to plot the KMeans clusters 
+def plot_KMean_clusters(df, features):
+    """
+    Args:
+    DataFrame : A pandas dataframe object containing data of interest
+    features : A list of columns containing all the independent variables(predictors)
+    
+    Returns: A scatter plot showing the clusters formed by the KMeans model.
+    """
+    
+    # Plot the clusters
+    plt.figure(figsize=(10, 6))
+    sns.scatterplot(x=features[0], y=features[1], hue='Cluster', data=df, palette='viridis')
+    plt.title('Clusters formed by KMeans')
+    plt.show()
+
+# Function to encode the genre column
+def encodedMethod(genre)
+    """
+    Args:
+    genre : A list of column(s) of the dependent variable(label)
+    
+    Returns: A list of column(s) of the dependent variable(label) encoded using one-hot encoding.
+    """
+    
+    if genre == 'Action':
+        encoded_genre = 1
+    else if genre == 'Adventure':
+        encoded_genre = 2
+    else if genre == 'Animation':
+         encoded_genre = 3
+    
+    return encoded_genre
+
+# Elbow method to determine the optimal number of clusters 
+def elbow_method(df, max_clusters):
+    """
+    Args:
+    DataFrame : A pandas dataframe object containing data of interest
+    max_clusters : The maximum number of clusters to form
+    
+    Returns: A plot showing the elbow curve for the KMeans model.
+    """
+    
+    # Initialize a list to store the sum of squared distances for each k
+    ssd = []
+
+    # Loop over a range of k values
+    for k in range(1, max_clusters + 1):
+        # Create a KMeans model with k clusters
+        kmeans = KMeans(n_clusters=k, n_init='auto', random_state=random_state)
         
+        # Fit the model to the data
+        kmeans.fit(df)
+        
+        # Append the sum of squared distances to the list
+        ssd.append(kmeans.inertia_)
+
+    # Plot the elbow curve
+    plt.figure(figsize=(10, 6))
+    plt.plot(range(1, max_clusters + 1), ssd, marker='o')
+    plt.xlabel('Number of Clusters (k)')
+    plt.ylabel('Sum of Squared Distances')
+    plt.title('Elbow Method for Optimal k')
+    plt.show()
+
+    return ssd
+
+# Determine the rate of decrease between each k value 
+def rate_of_decrease(ssd):
+    """
+    Args:
+    ssd : A list of sum of squared distances for each k value
+    
+    Returns: A list of rate of decrease between each k value.
+    """
+    
+    # Calculate the rate of decrease between each k value
+    rate_of_decrease = [ssd[i] - ssd[i + 1] for i in range(len(ssd) - 1)]
+
+    for i in range(len(ssd) - 1):
+        print(f"Rate of decrease between k={i + 1} and k={i + 2}: {rate_of_decrease[i]}")
+    
+    return rate_of_decrease
+
