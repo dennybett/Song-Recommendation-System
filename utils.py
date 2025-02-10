@@ -98,6 +98,7 @@ def plot_numeric_distributions(df):
     
     plt.tight_layout()
     plt.show()
+    
 
 
 def plot_correlation_heatmap(df):
