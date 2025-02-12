@@ -20,4 +20,7 @@ git commit -m "Add new feature"
 # Push the changes to GitHub
 git push origin my-feature-branch
 
-# Create a pull request on GitHub
+git fetch origin  # Fetch latest changes from remote
+git reset --hard origin/<branch-name>  # Reset local branch to remote state
+This will overwrite your local branch with the latest version from the remote branch.
+Warning: This deletes all local changes that are not pushed.
