@@ -6,7 +6,9 @@ from sklearn.preprocessing import StandardScaler
 from sklearn.neighbors import NearestNeighbors
 
 # Load trained model
-model = joblib.load("output/kmeans_model.pkl")
+kmeans_model = joblib.load("output/kmeans_model.pkl")
+agglo_model = joblib.load("output/agglo_model.pkl")
+gaussian_model = joblib.load("output/gaussian_model.pkl")
 
 # Import and read output from the main notebook
 cleaned_data = pd.read_csv("output/df_cleaned_with_labels.csv")
@@ -32,15 +34,16 @@ features = np.array([[danceability, energy, speechiness, acousticness, instrumen
 
 # Function to find best match
 def find_best_match(model, df, method, features):
-    # Get the cluster label for the input features
-    prediction = model.predict(features)
-    
     # Find all songs in the same cluster using the cleaned data
     if method == "K-Means":
+        prediction = model.predict(features)
         cluster_songs = df[df["kmeans_labels"] == prediction[0]]
     elif method == "Agglomerative":
+        #prediction = model.fit_predict(features)
+        prediction = [0]
         cluster_songs = df[df["agglo_labels"] == prediction[0]]
     elif method == "Gaussian":
+        prediction = model.predict(features)
         cluster_songs = df[df["gaussian_labels"] == prediction[0]]
     
     # Export the matched songs to a CSV file for testing
@@ -52,15 +55,15 @@ def find_best_match(model, df, method, features):
 
 # Recommend track using K-Means Clustering
 if st.button("Find My Song (K-Means) 🎧"):
-    best_match = find_best_match(model, cleaned_data, "K-Means", features)
-    st.success(f":musical_note: Best K-Means match for your input:  \n:microphone: Track Name: **{best_match[0]}**  \n:female-singer: Artist Name: **{best_match[1]}**")
+    best_match = find_best_match(kmeans_model, cleaned_data, "K-Means", features)
+    st.success(f":musical_note: Best match for your input:  \n:microphone: Track Name: **{best_match[0]}**  \n:female-singer: Artist Name: **{best_match[1]}**")
 
 # Recommend track using Agglomerative Clustering
 if st.button("Find My Song (Agglomerative) 🎧"):
-    best_match = find_best_match(model, cleaned_data, "Agglomerative", features)
-    st.success(f":musical_note: Best Agglomerative match for your input:  \n:microphone: Track Name: **{best_match[0]}**  \n:female-singer: Artist Name: **{best_match[1]}**")
+    best_match = find_best_match(agglo_model, cleaned_data, "Agglomerative", features)
+    st.success(f":musical_note: Best match for your input:  \n:microphone: Track Name: **{best_match[0]}**  \n:female-singer: Artist Name: **{best_match[1]}**")
 
 # Recommend track using Gaussian Clustering
 if st.button("Find My Song (Gaussian) 🎧"):
-    best_match = find_best_match(model, cleaned_data, "Gaussian", features) 
-    st.success(f":musical_note: Best Gaussian match for your input:  \n:microphone: Track Name: **{best_match[0]}**  \n:female-singer: Artist Name: **{best_match[1]}**")
+    best_match = find_best_match(gaussian_model, cleaned_data, "Gaussian", features) 
+    st.success(f":musical_note: Best match for your input:  \n:microphone: Track Name: **{best_match[0]}**  \n:female-singer: Artist Name: **{best_match[1]}**")
