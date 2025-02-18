@@ -12,8 +12,6 @@ model = joblib.load("output/kmeans_model.pkl")
 cleaned_data = pd.read_csv("output/df_cleaned_with_labels.csv")
 scaled_data = pd.read_csv("output/df_scaled_with_labels.csv")
 
-#container = st.container()
-
 # Streamlit UI
 st.title(":musical_note: Spotify Song Recommendation")
 st.write("Enter song characteristics to get recommended tracks!")
