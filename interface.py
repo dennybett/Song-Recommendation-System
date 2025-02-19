@@ -2,17 +2,28 @@ import streamlit as st
 import pandas as pd
 import numpy as np
 import joblib  # Load ML model
-from sklearn.preprocessing import StandardScaler
+from sklearn.preprocessing import StandardScaler, MinMaxScaler
 from sklearn.neighbors import NearestNeighbors
 
-# Load trained model
+# Future use
 kmeans_model = joblib.load("output/kmeans_model.pkl")
 agglo_model = joblib.load("output/agglo_model.pkl")
 gaussian_model = joblib.load("output/gaussian_model.pkl")
 
+# Load trained model for K-Means without scaling
+kmeans_nonscaled_model = joblib.load("output/kmeans_nonscale_model.pkl")
+
+# Future use
 # Import and read output from the main notebook
 cleaned_data = pd.read_csv("output/df_cleaned_with_labels.csv")
 scaled_data = pd.read_csv("output/df_scaled_with_labels.csv")
+
+# Import and read output from the main notebook for the non-scaled data
+cleaned2_data = pd.read_csv("output/df_cleaned2_with_labels.csv")
+non_scaled_data = pd.read_csv("output/df_non_scaled_with_labels.csv")
+
+# Max_Records
+max_records = 10
 
 # Streamlit UI
 st.title(":musical_note: Spotify Song Recommendation")
@@ -30,40 +41,37 @@ valence = st.sidebar.slider("Mood (Sad <-> Happy)", 0.0, 1.0, 0.5)
 tempo = st.sidebar.slider("Tempo (BPM) (Slow <-> Fast)", 50.0, 200.0, 120.0)
 
 # Convert inputs to array
-features = np.array([[danceability, energy, speechiness, acousticness, instrumentalness, liveness, valence, tempo]])
+features = np.array([[danceability, energy, speechiness, acousticness, instrumentalness, liveness, valence, tempo]]) 
 
 # Function to find best match
-def find_best_match(model, df, method, features):
+def find_top_match(model, df, method, features):
     # Find all songs in the same cluster using the cleaned data
     if method == "K-Means":
         prediction = model.predict(features)
         cluster_songs = df[df["kmeans_labels"] == prediction[0]]
-    elif method == "Agglomerative":
-        #prediction = model.fit_predict(features)
-        prediction = [0]
-        cluster_songs = df[df["agglo_labels"] == prediction[0]]
-    elif method == "Gaussian":
-        prediction = model.predict(features)
-        cluster_songs = df[df["gaussian_labels"] == prediction[0]]
+
+        # Debug Code
+        st.success(f'Cluster: {prediction[0]}')
+        #st.success(len(cluster_songs))
     
     # Export the matched songs to a CSV file for testing
     cluster_songs.to_csv('output/cluster_songs_matched.csv')
 
-    # Select a random song from the cluster
-    best_match = cluster_songs.sample(1)[["track_name", "artist"]].values[0]
-    return best_match
+    # Select random song(s) from the cluster
+    top_match = cluster_songs.sample(max_records)[["track_name", "artist"]].values.tolist()
+
+    # Debug Code
+    #st.success(len(top_match))
+
+    return top_match
 
 # Recommend track using K-Means Clustering
 if st.button("Find My Song (K-Means) 🎧"):
-    best_match = find_best_match(kmeans_model, cleaned_data, "K-Means", features)
-    st.success(f":musical_note: Best match for your input:  \n:microphone: Track Name: **{best_match[0]}**  \n:female-singer: Artist Name: **{best_match[1]}**")
+    top_match = find_top_match(kmeans_nonscaled_model, cleaned2_data, "K-Means", features)
 
-# Recommend track using Agglomerative Clustering
-if st.button("Find My Song (Agglomerative) 🎧"):
-    best_match = find_best_match(agglo_model, cleaned_data, "Agglomerative", features)
-    st.success(f":musical_note: Best match for your input:  \n:microphone: Track Name: **{best_match[0]}**  \n:female-singer: Artist Name: **{best_match[1]}**")
+    # Debug Code
+    #st.success(top_match)
 
-# Recommend track using Gaussian Clustering
-if st.button("Find My Song (Gaussian) 🎧"):
-    best_match = find_best_match(gaussian_model, cleaned_data, "Gaussian", features) 
-    st.success(f":musical_note: Best match for your input:  \n:microphone: Track Name: **{best_match[0]}**  \n:female-singer: Artist Name: **{best_match[1]}**")
+    st.success(f":musical_note: Best {max_records} matches for your input:")
+    for i in range(0, max_records):
+        st.write(f"\n:musical_score: Track Name: **{top_match[i][0]}**  \n:male-singer: Artist Name: **{top_match[i][1]}**")

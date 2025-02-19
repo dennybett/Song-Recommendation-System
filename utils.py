@@ -335,33 +335,8 @@ def train_gaussian_mixture_model(df, num_components):
 
     return df
 
-# Train DBSCAN model
-def train_dbscan_model(df, eps, min_samples):
-    """
-    Args:
-    DataFrame : A pandas dataframe object containing data of interest
-    eps : The maximum distance between two samples for one to be considered as in the neighborhood of the other
-    min_samples : The number of samples in a neighborhood for a point to be considered as a core point
-    
-    Returns: A DBSCAN model trained on the data.
-    """
-    
-    # Initialize a DBSCAN model
-    dbscan = DBSCAN(eps=eps, min_samples=min_samples)
-    
-    # Fit the model to the data
-    dbscan.fit(df)
-
-    # Make predictions on the data
-    clusters = dbscan.fit_predict(df)
-    
-    # Add the cluster labels to the original DataFrame
-    df['Cluster'] = clusters
-
-    return df 
-
-# Function to plot the KMeans clusters 
-def plot_KMean_clusters(df, features):
+# Function to plot the clusters 
+def plot_2_clusters(df, features):
     """
     Args:
     DataFrame : A pandas dataframe object containing data of interest
@@ -371,28 +346,28 @@ def plot_KMean_clusters(df, features):
     """
     
     # Plot the clusters
-    plt.figure(figsize=(10, 6))
-    sns.scatterplot(x=features[0], y=features[1], hue='Cluster', data=df, palette='viridis')
-    plt.title('Clusters formed by KMeans')
-    plt.show()
-
-# Function to encode the genre column
-def encodedMethod(genre):
-    """
-    Args:
-    genre : A list of column(s) of the dependent variable(label)
-    
-    Returns: A list of column(s) of the dependent variable(label) encoded using one-hot encoding.
-    """
-    
-    if genre == 'Action':
-        encoded_genre = 1
-    elif genre == 'Adventure':
-        encoded_genre = 2
-    elif genre == 'Animation':
-         encoded_genre = 3
-    
-    return encoded_genre
+    plt.figure(figsize=(10, 10))
+    if (features == "kmeans"):
+        plt.scatter(df['pca1'], df['pca2'], c=df[f"kmeans_labels"], cmap='viridis')
+        plt.title('KMeans Clustering')
+        plt.xlabel('PCA 1')
+        plt.ylabel('PCA 2')
+        plt.savefig('output/kmeans_pca.png')
+        plt.show()
+    elif (features == "agglo"):
+        plt.scatter(df['pca1'], df['pca2'], c=df[f"agglo_labels"], cmap='viridis')
+        plt.title('Agglomerative Clustering')
+        plt.xlabel('PCA 1')
+        plt.ylabel('PCA 2')
+        plt.savefig('output/agglo_pca.png')
+        plt.show()
+    elif (features == "gaussian"):
+        plt.scatter(df['pca1'], df['pca2'], c=df[f"gaussian_labels"], cmap='viridis')
+        plt.title('Gaussian Mixture Model Clustering')
+        plt.xlabel('PCA 1')
+        plt.ylabel('PCA 2')
+        plt.savefig('output/gaussian_pca.png')
+        plt.show()
 
 # Elbow method to determine the optimal number of clusters 
 def elbow_method(df, max_clusters):
