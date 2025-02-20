@@ -370,7 +370,7 @@ def plot_2_clusters(df, features):
         plt.show()
 
 # Elbow method to determine the optimal number of clusters 
-def elbow_method(df, max_clusters):
+def elbow_method(df, max_clusters, elbow_title):
     """
     Args:
     DataFrame : A pandas dataframe object containing data of interest
@@ -398,7 +398,7 @@ def elbow_method(df, max_clusters):
     plt.plot(range(1, max_clusters + 1), ssd, marker='o')
     plt.xlabel('Number of Clusters (k)')
     plt.ylabel('Sum of Squared Distances')
-    plt.title('Elbow Method for Optimal k')
+    plt.title(elbow_title)
     plt.show()
 
     return ssd
