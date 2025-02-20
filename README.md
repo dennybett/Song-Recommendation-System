@@ -66,7 +66,7 @@ Below is an example of the expected Streamlit UI when a user searches for songs:
                 BCS_Project_2
 │── data                  # CSV dataset of the songs used in the ML model 
 
-│── output/               # Contains pre-trained ML models & processed datasets
+│── output                # Contains pre-trained ML models & processed datasets
 
 │── interface.py          # Streamlit UI & Recommendation Logic
 
