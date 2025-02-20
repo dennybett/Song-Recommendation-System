@@ -33,7 +33,7 @@ cd BCS_Project_2
 
 ### **2. Install Dependencies**
 ```bash
-pip install numpy pandas matplotlib seaborn scipy sklearn statsmodels streamlit joblib
+pip install numpy pandas matplotlib seaborn scipy scikit-learn statsmodels streamlit joblib
 ```
 
 ### **3. Run the Streamlit App**
@@ -131,17 +131,15 @@ streamlit --version
 ## Acknowledgments
 
 This project utilizes the following datasets and documentations:
-1. **Muse - The Musical Sentiment Dataset**: Available on [Kaggle](https://www.kaggle.com/datasets/cakiki/muse-the-musical-sentiment-dataset), this dataset provides a comprehensive collection of songs with sentiment analysis.
+1. **Top 10000 songs EDA & Models**: Available on [Kaggle](https://www.kaggle.com/code/joebeachcapital/top-10000-songs-eda-models/notebook), this dataset provides a comprehensive collection of songs with sentiment analysis.
 
-2. **Spotify Dataset**: A dataset used for building a music recommendation system, available on [Kaggle](https://www.kaggle.com/code/vatsalmavani/music-recommendation-system-using-spotify-dataset).
+2. [Python Documentation](https://docs.python.org/3/).
 
-3. [Python Documentation](https://docs.python.org/3/).
+3. [Pandas Documentation](https://pandas.pydata.org/pandas-docs/stable/index.html).
 
-4. [Pandas Documentation](https://pandas.pydata.org/pandas-docs/stable/index.html).
+4. [Scikit-learn Documentation](https://scikit-learn.org/stable/index.html).
 
-5. [Scikit-learn Documentation](https://scikit-learn.org/stable/index.html).
-
-6. [Referenced article for creating an AI-based music recommendation system](https://www.eliftech.com/insights/all-you-need-to-know-about-a-music-recommendation-system-with-a-step-by-step-guide-to-creating-it/).
+5. [Referenced article for creating an AI-based music recommendation system](https://www.eliftech.com/insights/all-you-need-to-know-about-a-music-recommendation-system-with-a-step-by-step-guide-to-creating-it/).
 
 ## Contribution Guideline
 
