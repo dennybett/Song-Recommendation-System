@@ -78,7 +78,7 @@ Below is an example of the expected Streamlit UI when a user searches for songs:
 
 │── Project2 v3 Demo.mp4  # Video demonstration of the project
 
-│── presentation.pptx     # PowerPoint presentation for project showcase
+│── Presentation.pdf      # Powerpoint presentation ()pdf format for project showcase
 ```
 
 ## Project Demonstration
